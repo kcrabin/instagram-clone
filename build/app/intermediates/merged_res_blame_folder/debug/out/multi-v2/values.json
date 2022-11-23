@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rabinkc/Desktop/testProjects/instagram-clone/instagram_clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/Users/rabinkc/Desktop/new folder/instagram-clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/Users/rabinkc/.gradle/caches/transforms-3/aa701b47cec244085d46a1a42fcc7fb9/transformed/core-1.6.0/res/values/values.xml",
@@ -95,7 +95,7 @@
                     }
                 },
                 {
-                    "source": "/Users/rabinkc/Desktop/testProjects/instagram-clone/instagram_clone/build/app/generated/res/google-services/debug/values/values.xml",
+                    "source": "/Users/rabinkc/Desktop/new folder/instagram-clone/build/app/generated/res/google-services/debug/values/values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",
@@ -112,7 +112,7 @@
                     }
                 },
                 {
-                    "source": "/Users/rabinkc/Desktop/testProjects/instagram-clone/instagram_clone/android/app/src/main/res/values/styles.xml",
+                    "source": "/Users/rabinkc/Desktop/new folder/instagram-clone/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
