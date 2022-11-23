@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rabinkc/Desktop/testProjects/instagram-clone/instagram_clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-be/values-be.xml",
+            "outputFile": "/Users/rabinkc/Desktop/new folder/instagram-clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-be/values-be.xml",
             "map": [
                 {
                     "source": "/Users/rabinkc/.gradle/caches/transforms-3/19fea4fb28dedd992824e13cc158e7a1/transformed/jetified-play-services-base-18.0.1/res/values-be/values.xml",
