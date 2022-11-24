@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rabinkc/Desktop/new folder/instagram-clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "/Users/rabinkc/Desktop/Nipuna-projects/instagram-clone/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/rabinkc/Desktop/new folder/instagram-clone/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/Users/rabinkc/Desktop/Nipuna-projects/instagram-clone/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

@@ -6,10 +6,10 @@ import '../../search_page/search_page.dart';
 import '../../shop_page/shop_page.dart';
 import '../home_page.dart';
 
-class BottomNavigationBar extends StatelessWidget {
-  const BottomNavigationBar({
-    Key? key,
-  }) : super(key: key);
+class BottomBar extends StatelessWidget {
+  // const BottomNavigationBar({
+  //   Key? key,
+  // }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

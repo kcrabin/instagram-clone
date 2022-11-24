@@ -38,9 +38,13 @@ class _Signup_PageState extends State<Signup_Page> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/images/logo1.png'),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                ),
+                Image.asset(
+                  'assets/images/logo1.png',
+                  height: 60,
+                  width: 130,
                 ),
                 const Text(
                   'Signup to see photos and videos',

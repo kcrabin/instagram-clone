@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/app/modules/add_page/add_page.dart';
-import 'package:instagram_clone/app/modules/profile_page/profile_page.dart';
-import 'package:instagram_clone/app/modules/search_page/search_page.dart';
-import 'package:instagram_clone/app/modules/shop_page/shop_page.dart';
 
+import 'widgets/botton_navigationbar.dart';
 import 'widgets/newsfeed.dart';
 import 'widgets/storybar.dart';
 
@@ -65,96 +62,7 @@ class Homepage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(),
-    );
-  }
-}
-
-class BottomNavigationBar extends StatelessWidget {
-  const BottomNavigationBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      elevation: 0,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Homepage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.home,
-              size: 30,
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.search,
-              size: 30,
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.add_box_outlined,
-              size: 40,
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShopPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.local_mall_outlined,
-              size: 30,
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Profile(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.person,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }

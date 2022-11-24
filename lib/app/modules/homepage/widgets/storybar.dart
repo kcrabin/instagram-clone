@@ -17,22 +17,16 @@ class StoryBar extends StatelessWidget {
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           child: Column(
-            children: const [
+            children: [
               CircleAvatar(
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.blueGrey,
                 radius: 40,
-                child:
-                    // Image.asset(
-                    //   'assets/images/person2',
-                    //   height: 20,
-                    // )
-                    Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 50,
+                child: ClipOval(
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.asset('assets/newsfeed_photos/story2.png'),
                 ),
               ),
-              Text('Name'),
+              const Text('Name'),
             ],
           ),
         ),

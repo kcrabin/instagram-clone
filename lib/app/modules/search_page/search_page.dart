@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -42,6 +43,7 @@ class SearchPage extends StatelessWidget {
             ],
           ),
         ),
+        bottomNavigationBar: BottomBar(),
       ),
     );
   }

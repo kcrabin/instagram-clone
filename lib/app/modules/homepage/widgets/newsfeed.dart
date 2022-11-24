@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class NewsFeed extends StatelessWidget {
@@ -20,13 +21,13 @@ class NewsFeed extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             CircleAvatar(
                               backgroundColor: Colors.grey,
                               radius: 20,
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
+                              child: ClipOval(
+                                child: Image.asset(
+                                    'assets/newsfeed_photos/storyphoto.PNG'),
                               ),
                             ),
                             SizedBox(
@@ -48,8 +49,37 @@ class NewsFeed extends StatelessWidget {
                       height: 5,
                     ),
                     Container(
-                      height: 350,
-                      decoration: const BoxDecoration(color: Colors.grey),
+                      height: 250,
+                      decoration: BoxDecoration(color: Colors.grey),
+                      child: CarouselSlider(
+                        items: [
+                          SizedBox(
+                            // height: 350,
+                            child: Image.asset(
+                                'assets/newsfeed_photos/gradient.jpeg'),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            child: Image.asset(
+                                'assets/newsfeed_photos/image1.jpeg'),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            child: Image.asset(
+                                'assets/newsfeed_photos/image2.jpeg'),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            child: Image.asset(
+                                'assets/newsfeed_photos/mountain.jpeg'),
+                          ),
+                        ],
+                        options: CarouselOptions(
+                            height: 350,
+                            enlargeCenterPage: true,
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 0.99),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
