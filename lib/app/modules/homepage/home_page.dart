@@ -59,6 +59,7 @@ class Homepage extends StatelessWidget {
           children: [
             StoryBar(),
             NewsFeed(),
+            
           ],
         ),
       ),
