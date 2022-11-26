@@ -22,6 +22,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  bottom_drawer:
+    dependency: "direct main"
+    description:
+      name: bottom_drawer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.1"
   characters:
     dependency: transitive
     description:
@@ -268,4 +282,4 @@ packages:
     version: "2.1.2"
 sdks:
   dart: ">=2.18.4 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=2.0.0"

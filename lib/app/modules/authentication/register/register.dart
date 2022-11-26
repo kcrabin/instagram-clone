@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../homepage/home_page.dart';
@@ -17,6 +18,13 @@ class _Signup_PageState extends State<Signup_Page> {
   final fullnamecontroller = TextEditingController();
   final passwordController = TextEditingController();
   bool passToggle = true;
+
+  Future Signup() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailcontroller.text.trim(),
+      password: passwordController.text.trim(),
+    );
+  }
 
   @override
   void dispose() {
@@ -38,9 +46,13 @@ class _Signup_PageState extends State<Signup_Page> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/images/logo1.png'),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                ),
+                Image.asset(
+                  'assets/images/logo1.png',
+                  height: 60,
+                  width: 130,
                 ),
                 const Text(
                   'Signup to see photos and videos',
@@ -117,11 +129,11 @@ class _Signup_PageState extends State<Signup_Page> {
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(8),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please Enter Full name";
-                    }
-                  },
+                  // validator: (value) {
+                  //   if (value!.isEmpty) {
+                  //     return "Please Enter Full name";
+                  //   }
+                  // },
                 ),
                 const SizedBox(
                   height: 10,
@@ -134,11 +146,11 @@ class _Signup_PageState extends State<Signup_Page> {
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(8),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please Enter Username";
-                    }
-                  },
+                  // validator: (value) {
+                  //   if (value!.isEmpty) {
+                  //     return "Please Enter Username";
+                  //   }
+                  // },
                 ),
                 const SizedBox(
                   height: 10,
@@ -176,6 +188,7 @@ class _Signup_PageState extends State<Signup_Page> {
                   onPressed: () {
                     if (_formfield.currentState!.validate()) {
                       print("success");
+                      Signup();
                       emailcontroller.clear();
                       usernamecontroller.clear();
                       fullnamecontroller.clear();

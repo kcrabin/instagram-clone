@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../../homepage/home_page.dart';
@@ -11,10 +13,32 @@ class Login_Page extends StatefulWidget {
 }
 
 class _Login_PageState extends State<Login_Page> {
+// final _auth = Firebase.instance;
+
   final _formfield = GlobalKey<FormState>();
   final emailcontroller = TextEditingController();
   final passwordController = TextEditingController();
   bool passToggle = true;
+
+  Future Login() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailcontroller.text.trim(),
+      password: passwordController.text.trim(),
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Homepage(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    emailcontroller.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,14 +149,15 @@ class _Login_PageState extends State<Login_Page> {
                   onPressed: () {
                     if (_formfield.currentState!.validate()) {
                       print('success');
+                      Login();
                       emailcontroller.clear();
                       passwordController.clear();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Homepage(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => Homepage(),
+                      //   ),
+                      // );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -189,7 +214,7 @@ class _Login_PageState extends State<Login_Page> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Homepage(),
+                      builder: (context) => Signup_Page(),
                     ),
                     (route) => false,
                   );

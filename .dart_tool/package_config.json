@@ -20,6 +20,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "bottom_drawer",
+      "rootUri": "file:///Users/rabinkc/Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/bottom_drawer-0.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "carousel_slider",
+      "rootUri": "file:///Users/rabinkc/Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/carousel_slider-4.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "characters",
       "rootUri": "file:///Users/rabinkc/Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.1",
       "packageUri": "lib/",
@@ -242,7 +254,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-11-23T15:39:20.437307Z",
+  "generated": "2022-11-25T08:56:41.458649Z",
   "generator": "pub",
   "generatorVersion": "2.18.4"
 }
