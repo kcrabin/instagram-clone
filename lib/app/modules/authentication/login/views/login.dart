@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/forgot_password_page/forgot_password.dart';
+import 'package:instagram_clone/main.dart';
 
 import '../../../homepage/home_page.dart';
-import '../../register/register.dart';
+import '../../../widgets/utils.dart';
 
 class Login_Page extends StatefulWidget {
-  const Login_Page({Key? key}) : super(key: key);
+  final VoidCallback onClickedSignup;
+  const Login_Page({Key? key, required this.onClickedSignup}) : super(key: key);
 
   @override
   State<Login_Page> createState() => _Login_PageState();
@@ -21,16 +24,30 @@ class _Login_PageState extends State<Login_Page> {
   bool passToggle = true;
 
   Future Login() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailcontroller.text.trim(),
-      password: passwordController.text.trim(),
-    );
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Homepage(),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
       ),
     );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailcontroller.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Homepage(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      Utils.showSnackBar(e.message);
+    }
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   @override
@@ -138,7 +155,14 @@ class _Login_PageState extends State<Login_Page> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPasswordPage(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       'Forgot Password?',
                       // style: TextStyle(decoration: TextDecoration.underline),
@@ -205,23 +229,37 @@ class _Login_PageState extends State<Login_Page> {
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
         color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Don\'t have account?'),
-            TextButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Signup_Page(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                child: const Text('Signup'))
-          ],
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: 'Don\'t have account? ',
+              style: TextStyle(color: Colors.black),
+              children: [
+                TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = widget.onClickedSignup,
+                    text: 'Sign Up',
+                    style: const TextStyle(color: Colors.blue))
+              ]),
         ),
+
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     const Text('Don\'t have account?'),
+        //     TextButton(
+        //         onPressed: () {
+        //           Navigator.pushAndRemoveUntil(
+        //             context,
+        //             MaterialPageRoute(
+        //               builder: (context) => Signup_Page(),
+        //             ),
+        //             (route) => false,
+        //           );
+        //         },
+        //         child: const Text('Signup'))
+        //   ],
+        // ),
       ),
     );
   }

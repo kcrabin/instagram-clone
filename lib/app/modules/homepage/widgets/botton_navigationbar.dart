@@ -13,83 +13,87 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      elevation: 0,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Homepage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.home,
-              size: 30,
+    return Padding(
+      padding: const EdgeInsets.all(7.0),
+      child: BottomAppBar(
+        elevation: 0,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Homepage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.home_filled,
+                size: 25,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.search,
-              size: 30,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.search,
+                size: 27,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.add_box_outlined,
-              size: 40,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.add_box_outlined,
+                size: 25,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShopPage(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.local_mall_outlined,
-              size: 30,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.local_mall_outlined,
+                size: 24,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Profile(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.person,
-              size: 30,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profile(),
+                  ),
+                );
+              },
+              child: const CircleAvatar(
+                radius: 13,
+                backgroundImage:
+                    ExactAssetImage('assets/newsfeed_photos/story2.png'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

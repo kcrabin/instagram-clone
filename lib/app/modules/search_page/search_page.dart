@@ -94,12 +94,12 @@ class SearchPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(title: Text('Search Page')),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                InkWell(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
+                child: InkWell(
                   onTap: () {
                     print('ontap');
                     Navigator.push(
@@ -109,18 +109,21 @@ class SearchPage extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    height: 37,
+                    height: 35,
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.25),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
                       ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: const [
+                          SizedBox(
+                            width: 10,
+                          ),
                           Icon(Icons.search),
                           SizedBox(
                             width: 10,
@@ -134,36 +137,33 @@ class SearchPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 50,
+                child: GridView.count(
+                  mainAxisSpacing: 3,
+                  crossAxisSpacing: 3,
+                  crossAxisCount: 3,
+                  children: [...Images],
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height - 50,
-                  child: GridView.count(
-                    mainAxisSpacing: 3,
-                    crossAxisSpacing: 3,
-                    crossAxisCount: 3,
-                    children: [...Images],
-                  ),
-                  //   GridView.builder(
-                  //       itemCount: imgList.length,
-                  //       // itemCount: 30,
-                  //       gridDelegate:
-                  //           const SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 3,
-                  //         crossAxisSpacing: 2.0,
-                  //         mainAxisSpacing: 2.0,
-                  //         mainAxisExtent: 85,
-                  //       ),
-                  //       itemBuilder: (BuildContext context, index) {
-                  //         var imageinfo = imgList[index];
-                  //         return imageinfo;
-                  //         // return Image.asset(
-                  //         //     'assets/newsfeed_photos/gradient.jpeg');
-                  //       }),
-                ),
-              ],
-            ),
+                //   GridView.builder(
+                //       itemCount: imgList.length,
+                //       // itemCount: 30,
+                //       gridDelegate:
+                //           const SliverGridDelegateWithFixedCrossAxisCount(
+                //         crossAxisCount: 3,
+                //         crossAxisSpacing: 2.0,
+                //         mainAxisSpacing: 2.0,
+                //         mainAxisExtent: 85,
+                //       ),
+                //       itemBuilder: (BuildContext context, index) {
+                //         var imageinfo = imgList[index];
+                //         return imageinfo;
+                //         // return Image.asset(
+                //         //     'assets/newsfeed_photos/gradient.jpeg');
+                //       }),
+              ),
+            ],
           ),
         ),
         bottomNavigationBar: BottomBar(),

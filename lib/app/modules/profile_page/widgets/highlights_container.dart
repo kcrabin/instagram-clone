@@ -20,17 +20,21 @@ class HighlightsContainer extends StatelessWidget {
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Column(
-                  children: [
+                  children: const [
                     CircleAvatar(
-                      backgroundColor: Colors.red[300],
+                      backgroundColor: Colors.grey,
                       radius: 36,
                       child: CircleAvatar(
-                        radius: 33,
+                        backgroundColor: Colors.white,
+                        radius: 34,
                         backgroundImage: ExactAssetImage(
                             'assets/newsfeed_photos/highlights.jpeg'),
                       ),
                     ),
-                    const Text('Highlights'),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text('Highlights'),
                   ],
                 ),
               ),
@@ -46,15 +50,19 @@ class HighlightsContainer extends StatelessWidget {
               child: Column(
                 children: const [
                   CircleAvatar(
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.black,
                     radius: 34,
-                    child: ClipOval(
-                        clipBehavior: Clip.hardEdge,
-                        child: Icon(
-                          Icons.add,
-                          size: 35,
-                          color: Colors.white,
-                        )),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 33,
+                      child: ClipOval(
+                          clipBehavior: Clip.hardEdge,
+                          child: Icon(
+                            Icons.add,
+                            size: 35,
+                            color: Colors.black,
+                          )),
+                    ),
                   ),
                   Text('New'),
                 ],

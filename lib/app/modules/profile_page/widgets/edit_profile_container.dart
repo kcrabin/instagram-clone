@@ -14,10 +14,10 @@ class EditProfileContainer extends StatelessWidget {
           child: GestureDetector(
             onTap: () {},
             child: Container(
-              height: 40,
+              height: 35,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.grey,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.25),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
@@ -29,7 +29,9 @@ class EditProfileContainer extends StatelessWidget {
                   child: Text(
                     'Edit Profile',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -42,10 +44,10 @@ class EditProfileContainer extends StatelessWidget {
         GestureDetector(
           onTap: () {},
           child: Container(
-            height: 40,
+            height: 35,
             width: 40,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.25),
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
@@ -53,8 +55,8 @@ class EditProfileContainer extends StatelessWidget {
             child: const Padding(
                 padding: EdgeInsets.all(3),
                 child: Icon(
-                  Icons.person_add,
-                  color: Colors.white,
+                  Icons.person_add_outlined, size: 20,
+                  // color: Colors.white,
                 )),
           ),
         ),

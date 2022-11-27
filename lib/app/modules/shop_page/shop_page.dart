@@ -90,7 +90,8 @@ class ShopPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text(
           'Shop',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              fontSize: 23, color: Colors.black, fontWeight: FontWeight.bold),
         ),
         //  Icon(Icons.arrow_back),
         actions: const [
@@ -98,7 +99,7 @@ class ShopPage extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             child: Icon(
               Icons.arrow_forward,
-              size: 30,
+              size: 27,
               color: Colors.black,
             ),
           ),
@@ -106,7 +107,7 @@ class ShopPage extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             child: Icon(
               Icons.menu,
-              size: 30,
+              size: 27,
               color: Colors.black,
             ),
           ),
@@ -114,24 +115,27 @@ class ShopPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
           child: Column(
             children: [
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  height: 40,
+                  height: 35,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.25),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
                     ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: const [
+                        SizedBox(
+                          width: 10,
+                        ),
                         Icon(Icons.search),
                         SizedBox(
                           width: 10,
@@ -148,16 +152,16 @@ class ShopPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 5,
+                height: 10,
               ),
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                  height: 33,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.25),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
                     ),
                   ),
                   child: const Align(

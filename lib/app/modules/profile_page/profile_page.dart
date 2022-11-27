@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/forgot_password_page/forgot_password.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 
 import 'widgets/edit_profile_container.dart';
@@ -93,7 +95,11 @@ class Profile extends StatelessWidget {
           children: const [
             Icon(
               Icons.lock_outline,
+              size: 15,
               color: Colors.black,
+            ),
+            SizedBox(
+              width: 5,
             ),
             Text(
               'Username',
@@ -102,6 +108,7 @@ class Profile extends StatelessWidget {
             ),
             Icon(
               Icons.expand_more,
+              size: 20,
               color: Colors.black,
             )
           ],
@@ -114,18 +121,24 @@ class Profile extends StatelessWidget {
               child: const Icon(
                 Icons.add_box_outlined,
                 color: Colors.black,
-                size: 30,
+                size: 27,
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                );
+              },
               child: const Icon(
                 Icons.menu,
                 color: Colors.black,
-                size: 30,
+                size: 27,
               ),
             ),
           )
@@ -138,48 +151,78 @@ class Profile extends StatelessWidget {
             children: [
               const UserInfoContainer(),
               const SizedBox(
-                height: 15,
+                height: 25,
               ),
               const EditProfileContainer(),
               const SizedBox(
                 height: 20,
               ),
-              HighlightsContainer(),
+              const HighlightsContainer(),
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                // height: 300,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          Icons.grid_on,
-                          size: 30,
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        // flex: 2,
+                        child: Container(
+                          height: 35,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(width: 1, color: Colors.black),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.grid_on,
+                            size: 23,
+                          ),
                         ),
-                        Icon(
-                          Icons.video_library_outlined,
-                          size: 30,
-                        ),
-                        Icon(
-                          Icons.tag,
-                          size: 30,
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height - 50,
-                      child: GridView.count(
-                        mainAxisSpacing: 3,
-                        crossAxisSpacing: 3,
-                        crossAxisCount: 3,
-                        children: [...Images],
                       ),
+                      Expanded(
+                        // flex: 2,
+                        child: Container(
+                          height: 35,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(),
+                          child: const Icon(
+                            Icons.video_library_outlined,
+                            color: Colors.grey,
+                            size: 23,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        // flex: 2,
+                        child: Container(
+                          height: 35,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(),
+                          child: const Icon(
+                            Icons.tag,
+                            color: Colors.grey,
+                            size: 23,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 50,
+                    child: GridView.count(
+                      mainAxisSpacing: 3,
+                      crossAxisSpacing: 3,
+                      crossAxisCount: 3,
+                      children: [...Images],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               )
 
               // FloatingActionButton(
