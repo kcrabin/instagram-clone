@@ -27,7 +27,7 @@ class StoryBar extends StatelessWidget {
                           backgroundColor: Colors.grey,
                           radius: 36,
                           backgroundImage: ExactAssetImage(
-                              'assets/newsfeed_photos/view.jpeg'),
+                              'assets/newsfeed_photos/story2.png'),
                         ),
                         Icon(
                           Icons.add_circle,
@@ -58,8 +58,8 @@ class StoryBar extends StatelessWidget {
                       child: CircleAvatar(
                         // backgroundColor: Colors.blueGrey,
                         radius: 33,
-                        backgroundImage: ExactAssetImage(
-                            'assets/newsfeed_photos/story2.png'),
+                        backgroundImage:
+                            ExactAssetImage('assets/newsfeed_photos/view.jpeg'),
                         // child: ClipOval(
                         //   clipBehavior: Clip.hardEdge,
 

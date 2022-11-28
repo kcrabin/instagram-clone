@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/app/modules/forgot_password_page/forgot_password.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 
 import 'widgets/edit_profile_container.dart';
@@ -129,11 +127,62 @@ class Profile extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                );
+                showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        )),
+                        child: Wrap(
+                          children: const [
+                            ListTile(
+                              leading: Icon(Icons.settings),
+                              title: Text('Settings'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.history),
+                              title: Text('Your activity'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.archive_outlined),
+                              title: Text('Archive'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.qr_code_rounded),
+                              title: Text('QR Code'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.bookmark_border_sharp),
+                              title: Text('Saved'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.verified),
+                              title: Text('Digital Collectibles'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.group),
+                              title: Text('Close friends'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.star_border),
+                              title: Text('Favourites'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.format_align_center_outlined),
+                              title: Text('Covid-19 Information Centre'),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+                // FirebaseAuth.instance.signOut();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                // );
               },
               child: const Icon(
                 Icons.menu,

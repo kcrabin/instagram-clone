@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-  final String label;
+  final String hint;
   final TextInputType inputType;
   final TextInputAction inputAction;
   final TextEditingController? controller;
 
   const InputField(
       {this.inputType = TextInputType.text,
-      required this.label,
+      required this.hint,
       this.inputAction = TextInputAction.next,
       this.controller});
 
@@ -19,7 +19,7 @@ class InputField extends StatelessWidget {
       textInputAction: inputAction,
       controller: controller,
       decoration: InputDecoration(
-        labelText: label,
+        hintText: hint,
         border: OutlineInputBorder(),
         contentPadding: EdgeInsets.all(8),
       ),

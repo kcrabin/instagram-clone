@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/homepage/widgets/suggestions.dart';
 
 import 'widgets/botton_navigationbar.dart';
 import 'widgets/newsfeed.dart';
@@ -59,7 +60,7 @@ class Homepage extends StatelessWidget {
           children: [
             StoryBar(),
             NewsFeed(),
-            
+            // Suggestions(),
           ],
         ),
       ),
