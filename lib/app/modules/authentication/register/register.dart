@@ -2,10 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/widgets/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../main.dart';
 import '../../homepage/home_page.dart';
-import '../login/views/login.dart';
+
+final userRef = FirebaseFirestore.instance.collection('users');
+final DateTime timestamp = DateTime.now();
 
 class Signup_Page extends StatefulWidget {
   final VoidCallback onClickedLogin;
@@ -25,6 +28,10 @@ class _Signup_PageState extends State<Signup_Page> {
   bool passToggle = true;
 
   Future Signup() async {
+    String email = emailcontroller.text;
+    String username = usernamecontroller.text;
+    String fullname = fullnamecontroller.text;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -37,6 +44,14 @@ class _Signup_PageState extends State<Signup_Page> {
         email: emailcontroller.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      userRef.doc().set({
+        "username": username,
+        "fullname": fullname,
+        "email": email,
+        "timestamp": timestamp
+      });
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -214,10 +229,6 @@ class _Signup_PageState extends State<Signup_Page> {
                     if (_formfield.currentState!.validate()) {
                       print("success");
                       Signup();
-                      emailcontroller.clear();
-                      usernamecontroller.clear();
-                      fullnamecontroller.clear();
-                      passwordController.clear();
                     }
                   },
                   style: ElevatedButton.styleFrom(

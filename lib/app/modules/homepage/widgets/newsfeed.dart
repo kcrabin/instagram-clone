@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/authentication/widgets/input_field.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/suggestions.dart';
 
+import 'caughtup_container.dart';
+
 class NewsFeed extends StatefulWidget {
   const NewsFeed({
     Key? key,
@@ -42,20 +44,21 @@ class _NewsFeedState extends State<NewsFeed> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height - 240,
-          child: ListView.builder(
-            // shrinkWrap: true,
-            itemCount: 3,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: 1,
+          // scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.grey,
@@ -83,53 +86,56 @@ class _NewsFeedState extends State<NewsFeed> {
                           ),
                         ],
                       ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.more_vert,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    height: 250,
-                    decoration: const BoxDecoration(color: Colors.grey),
-                    child: CarouselSlider(
-                      items: [
-                        SizedBox(
-                          // height: 350,
-                          child: Image.asset(
-                              'assets/newsfeed_photos/gradient.jpeg'),
-                        ),
-                        SizedBox(
-                          height: 350,
-                          child:
-                              Image.asset('assets/newsfeed_photos/image1.jpeg'),
-                        ),
-                        SizedBox(
-                          height: 350,
-                          child:
-                              Image.asset('assets/newsfeed_photos/image2.jpeg'),
-                        ),
-                        SizedBox(
-                          height: 350,
-                          child: Image.asset(
-                              'assets/newsfeed_photos/mountain.jpeg'),
+                    ),
+                    Row(
+                      children: const [
+                        Icon(
+                          Icons.more_vert,
+                          color: Colors.grey,
                         ),
                       ],
-                      options: CarouselOptions(
-                          height: 350,
-                          enlargeCenterPage: true,
-                          aspectRatio: 16 / 9,
-                          viewportFraction: 1),
-                    ),
+                    )
+                  ],
+                ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+                Container(
+                  height: 250,
+                  decoration: const BoxDecoration(color: Colors.grey),
+                  child: CarouselSlider(
+                    items: [
+                      SizedBox(
+                        // height: 350,
+                        child:
+                            Image.asset('assets/newsfeed_photos/gradient.jpeg'),
+                      ),
+                      SizedBox(
+                        height: 350,
+                        child:
+                            Image.asset('assets/newsfeed_photos/image1.jpeg'),
+                      ),
+                      SizedBox(
+                        height: 350,
+                        child:
+                            Image.asset('assets/newsfeed_photos/image2.jpeg'),
+                      ),
+                      SizedBox(
+                        height: 350,
+                        child:
+                            Image.asset('assets/newsfeed_photos/mountain.jpeg'),
+                      ),
+                    ],
+                    options: CarouselOptions(
+                        height: 400,
+                        enlargeCenterPage: true,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1),
                   ),
-                  Row(
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 5),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -191,10 +197,13 @@ class _NewsFeedState extends State<NewsFeed> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Row(
+                ),
+                // const SizedBox(
+                //   height: 3,
+                // ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                  child: Row(
                     children: const [
                       Text('Liked by '),
                       Text(
@@ -206,10 +215,31 @@ class _NewsFeedState extends State<NewsFeed> {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
+                ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Username',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text('caption ...........'),
+                    ],
                   ),
-                  Row(
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                  child: Row(
                     children: [
                       InkWell(
                         onTap: () {},
@@ -220,21 +250,17 @@ class _NewsFeedState extends State<NewsFeed> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: const [
-                      Text(
-                        '28 October',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
+                ),
+                // const SizedBox(
+                //   height: 3,
+                // ),
+
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                  child: Row(
                     children: [
                       const CircleAvatar(
                         radius: 15,
@@ -262,22 +288,69 @@ class _NewsFeedState extends State<NewsFeed> {
                       )
                     ],
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                  child: Row(
+                    children: const [
+                      Text(
+                        '28 October',
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ),
 
-                  // Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: TextButton(
-                  //       onPressed: () {},
-                  //       child: Text(
-                  //         'View all 5 comments',
-                  //         style: TextStyle(color: Colors.grey),
-                  //       )),
-                  // ),
-                ],
-              ),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: TextButton(
+                //       onPressed: () {},
+                //       child: Text(
+                //         'View all 5 comments',
+                //         style: TextStyle(color: Colors.grey),
+                //       )),
+                // ),
+              ],
             ),
           ),
         ),
-        // Suggestions(),
+        Container(
+          color: Colors.grey[200],
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Suggested for you'),
+                    TextButton(onPressed: () {}, child: Text('See all'))
+                  ],
+                ),
+                Suggestions(),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        CircleAvatar(
+          backgroundColor: Colors.red,
+          radius: 27,
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 25,
+            child: Icon(
+              Icons.check,
+              color: Colors.red,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        CaughtUpContainer(),
       ],
     );
   }

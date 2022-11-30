@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 
@@ -5,7 +6,12 @@ import 'widgets/edit_profile_container.dart';
 import 'widgets/highlights_container.dart';
 import 'widgets/userinfo_container.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   // const Profile({super.key});
   final List<Image> Images = const [
     Image(
@@ -137,8 +143,18 @@ class Profile extends StatelessWidget {
                           topRight: Radius.circular(40),
                         )),
                         child: Wrap(
-                          children: const [
+                          children: [
                             ListTile(
+                              onTap: () {
+                                FirebaseAuth.instance.signOut();
+                                setState(() {
+                                  print("setting pressed");
+                                });
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                                // );
+                              },
                               leading: Icon(Icons.settings),
                               title: Text('Settings'),
                             ),
@@ -178,11 +194,6 @@ class Profile extends StatelessWidget {
                         ),
                       );
                     });
-                // FirebaseAuth.instance.signOut();
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                // );
               },
               child: const Icon(
                 Icons.menu,
@@ -210,6 +221,17 @@ class Profile extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
+
+              // TabBar(
+              //   tabs: [
+              //     Icon(Icons.grid_on),
+              //     Icon(Icons.video_collection_outlined),
+              //     Icon(Icons.tag)
+
+              //   ],
+
+              // ),
+
               Column(
                 children: [
                   Row(

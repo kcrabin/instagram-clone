@@ -11,12 +11,19 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
+  bool isUplaoding = false;
   final captionController = TextEditingController();
 
   @override
   void dispose() {
     captionController.dispose();
     super.dispose();
+  }
+
+  handleSubmit() {
+    setState(() {
+      isUplaoding = true;
+    });
   }
 
   @override
@@ -51,10 +58,13 @@ class _AddPageState extends State<AddPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.check,
-              size: 35,
-              color: Colors.blue[400],
+            child: InkWell(
+              onTap: isUplaoding ? null : () => handleSubmit(),
+              child: Icon(
+                Icons.check,
+                size: 35,
+                color: Colors.blue[400],
+              ),
             ),
           ),
         ],
@@ -64,6 +74,7 @@ class _AddPageState extends State<AddPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              isUplaoding ? LinearProgressIndicator() : Text(''),
               Row(
                 children: [
                   Container(

@@ -54,14 +54,16 @@ class Homepage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            StoryBar(),
-            NewsFeed(),
-            // Suggestions(),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Column(
+            children: [
+              StoryBar(),
+              NewsFeed(),
+              // Suggestions(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomBar(),
