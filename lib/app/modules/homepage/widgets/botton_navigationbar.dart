@@ -1,13 +1,19 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../add_page/add_page.dart';
+import '../../authentication/register/register.dart';
 import '../../profile_page/profile_page.dart';
 import '../../search_page/search_page.dart';
 import '../../shop_page/shop_page.dart';
 import '../home_page.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class BottomBar extends StatefulWidget {
   @override
@@ -15,14 +21,44 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  final _firebaseStorage = FirebaseStorage.instance;
+
+  String ProfilePic = '';
+
   File? image;
   final imagePicker = ImagePicker();
-  String image_path = '';
+  String imageUrl = '';
+  // String postId = Uuid().v4();
 
   Future getImage(ImageSource source) async {
     final image = await imagePicker.pickImage(source: source);
     if (image == null) return;
-    image_path = image.path;
+    var file = File(image.path);
+    String imageName = image.path.split('/').last;
+    var snapshot =
+        await _firebaseStorage.ref().child('images/$imageName').putFile(file);
+    var downloadUrl = await snapshot.ref.getDownloadURL();
+    setState(() {
+      print(downloadUrl);
+      imageUrl = downloadUrl;
+    });
+  }
+
+  @override
+  void initState() {
+    try {
+      String? uid = _auth.currentUser!.uid;
+
+      userRef.doc(uid).get().then((DocumentSnapshot doc) {
+        setState(() {
+          ProfilePic = doc['profilepic'];
+          // print(ProfilePic);
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+    super.initState();
   }
 
   // const BottomNavigationBar({
@@ -87,7 +123,7 @@ class _BottomBarState extends State<BottomBar> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AddPage(
-                                      image_path: image_path,
+                                      imageUrl: imageUrl,
                                     ),
                                   ),
                                 );
@@ -103,6 +139,15 @@ class _BottomBarState extends State<BottomBar> {
                             InkWell(
                               onTap: () async {
                                 await getImage(ImageSource.gallery);
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddPage(
+                                      imageUrl: imageUrl,
+                                    ),
+                                  ),
+                                );
                               },
                               child: Icon(
                                 Icons.collections,
@@ -142,10 +187,17 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                 );
               },
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: 15,
-                backgroundImage:
-                    ExactAssetImage('assets/newsfeed_photos/story2.png'),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(36),
+                  child: ProfilePic != ''
+                      ? Image.network(ProfilePic)
+                      : Image.network(
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
             ),
           ],

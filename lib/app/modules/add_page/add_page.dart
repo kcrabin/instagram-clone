@@ -1,18 +1,53 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/authentication/register/register.dart';
+import 'package:uuid/uuid.dart';
+
+// final StorageRefrence storageRef = FirebaseFirestore.instance.ref();
+final postRef = FirebaseFirestore.instance.collection('post');
+
+final DateTime timestamp = DateTime.now();
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class AddPage extends StatefulWidget {
-  final String image_path;
-  AddPage({super.key, required this.image_path});
+  final String imageUrl;
+
+  AddPage({super.key, required this.imageUrl});
 
   @override
   State<AddPage> createState() => _AddPageState();
 }
 
 class _AddPageState extends State<AddPage> {
+  String postId = Uuid().v4();
+
   bool isUplaoding = false;
   final captionController = TextEditingController();
+  String? username;
+
+  @override
+  void initState() {
+    try {
+      String? uid = _auth.currentUser!.uid;
+      // String uid = "fztP1FFujAAWLZi8IHKa";
+
+      userRef.doc(uid).get().then((DocumentSnapshot doc) {
+        // print(doc['username'] ?? '');
+        username = doc['username'];
+        // print(uid);
+        // print(doc.data());
+        print(username);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void dispose() {
@@ -20,10 +55,37 @@ class _AddPageState extends State<AddPage> {
     super.dispose();
   }
 
+  //  compressImage() async {
+  //   final tempDir = await getTemporaryDirectory();
+  //   final path = tempDir.path;
+  //   Im.Image? imageFile = Im.decodeImage(image!.readAsBytesSync());
+  //   final compressedFile = File('$path/img_$postId.jprg')
+  //     ..writeAsBytesSync(Im.encodeJpg(imageFile!, quality: 85));
+  //   image = compressedFile;
+  // }
+
   handleSubmit() {
+    String caption = captionController.text;
+    String imagePath = widget.imageUrl;
+
     setState(() {
       isUplaoding = true;
     });
+
+    postRef.doc().set({
+      "post_id": postId,
+      "likes": 0,
+      "comment": [],
+      "email": _auth.currentUser!.email,
+      "imagepath": imagePath,
+      "username": username,
+      "caption": caption,
+      "time": timestamp,
+    });
+    setState(() {
+      isUplaoding = false;
+    });
+    Navigator.pop(context);
   }
 
   @override
@@ -81,8 +143,8 @@ class _AddPageState extends State<AddPage> {
                     height: 150,
                     width: 150,
                     color: Colors.grey,
-                    child: Image.file(
-                      File(widget.image_path),
+                    child: Image.network(
+                      widget.imageUrl,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -93,7 +155,7 @@ class _AddPageState extends State<AddPage> {
                     child: TextField(
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
-                      // controller: captionController,
+                      controller: captionController,
                       decoration: InputDecoration(
                           hintText: 'Write a caption',
                           border: InputBorder.none),

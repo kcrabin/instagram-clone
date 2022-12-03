@@ -1,10 +1,19 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
+import 'package:instagram_clone/app/modules/profile_page/edit_profile.dart';
 
-import 'widgets/edit_profile_container.dart';
+import '../authentication/register/register.dart';
 import 'widgets/highlights_container.dart';
 import 'widgets/userinfo_container.dart';
+
+final postRef = FirebaseFirestore.instance.collection('post');
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class Profile extends StatefulWidget {
   @override
@@ -12,81 +21,50 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String email = '';
+  String username = '';
+  String fullname = '';
+  String userId = '';
+  String profilePic = '';
+
+  int postCount = 0;
+
+  @override
+  void initState() {
+    getPosts();
+    try {
+      String? uid = _auth.currentUser!.uid;
+
+      userRef.doc(uid).get().then((DocumentSnapshot doc) {
+        setState(() {
+          email = doc['email'];
+          username = doc['username'];
+          fullname = doc['fullname'];
+          profilePic = doc['profilepic'];
+
+          userId = uid;
+          print(email);
+          print(username);
+          print(fullname);
+          print(userId);
+          print(profilePic);
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+    super.initState();
+  }
+
+  getPosts() {
+    postRef.get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        print(doc.data);
+      });
+    });
+  }
+
   // const Profile({super.key});
-  final List<Image> Images = const [
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image1.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image2.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/mountain.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/story.png'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/storyphoto.PNG'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image1.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image2.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/mountain.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/storyphoto.PNG'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image1.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image2.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/mountain.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/story.png'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/storyphoto.PNG'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image1.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/image2.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/mountain.jpeg'),
-      fit: BoxFit.cover,
-    ),
-    Image(
-      image: AssetImage('assets/newsfeed_photos/storyphoto.PNG'),
-      fit: BoxFit.cover,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +74,7 @@ class _ProfileState extends State<Profile> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Row(
-          children: const [
+          children: [
             Icon(
               Icons.lock_outline,
               size: 15,
@@ -106,7 +84,7 @@ class _ProfileState extends State<Profile> {
               width: 5,
             ),
             Text(
-              'Username',
+              username,
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
@@ -209,11 +187,83 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              const UserInfoContainer(),
+              UserInfoContainer(
+                username: username,
+                postCount: postCount,
+                profilepic: profilePic,
+              ),
               const SizedBox(
                 height: 25,
               ),
-              const EditProfileContainer(),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfile(
+                              fullname: fullname,
+                              username: username,
+                              userIdToUpdate: userId,
+                              profilePic: profilePic,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 35,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.25),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Edit Profile',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 35,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.25),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: const Padding(
+                          padding: EdgeInsets.all(3),
+                          child: Icon(
+                            Icons.person_add_outlined, size: 20,
+                            // color: Colors.white,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+              // EditProfileContainer(
+              //     email: email, fullname: fullname, username: username),
               const SizedBox(
                 height: 20,
               ),
@@ -284,15 +334,43 @@ class _ProfileState extends State<Profile> {
                   const SizedBox(
                     height: 5,
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height - 50,
-                    child: GridView.count(
-                      mainAxisSpacing: 3,
-                      crossAxisSpacing: 3,
-                      crossAxisCount: 3,
-                      children: [...Images],
-                    ),
-                  ),
+                  new StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('post')
+                          .where('email', isEqualTo: email)
+                          .snapshots(),
+                      builder: ((BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        final docs = snapshot.data?.docs;
+                        if (docs != null) postCount = docs.length;
+
+                        if (!snapshot.hasData) return new Text('Loading');
+
+                        return GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 170,
+                                  childAspectRatio: 3 / 2,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 4),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: docs?.length,
+                          itemBuilder: (context, index) {
+                            final data = docs![index];
+                            String post_email = data.get('email');
+
+                            return post_email == email
+                                ? Image.network(
+                                    data.get(
+                                      'imagepath',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                                : SizedBox();
+                          },
+                        );
+                      }))
                 ],
               )
 

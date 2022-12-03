@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 
-class UserInfoContainer extends StatelessWidget {
-  const UserInfoContainer({
-    Key? key,
-  }) : super(key: key);
+class UserInfoContainer extends StatefulWidget {
+  String username;
+  int postCount;
+  String profilepic;
+  UserInfoContainer(
+      {Key? key,
+      required this.username,
+      required this.postCount,
+      required this.profilepic})
+      : super(key: key);
 
+  @override
+  State<UserInfoContainer> createState() => _UserInfoContainerState();
+}
+
+class _UserInfoContainerState extends State<UserInfoContainer> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -14,30 +25,25 @@ class UserInfoContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
-              // backgroundColor: Colors.blueGrey,
+              backgroundColor: Colors.grey,
               radius: 38,
-              backgroundImage:
-                  ExactAssetImage('assets/newsfeed_photos/story2.png'),
-              // child: ClipOval(
-              //   clipBehavior: Clip.hardEdge,
-
-              //   child:
-              //       Image.asset('assets/newsfeed_photos/story2.png'),
-              // ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(36),
+                child: widget.profilepic != ''
+                    ? Image.network(widget.profilepic)
+                    : Image.network(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg'),
+              ),
             ),
-            const Text(
-              'Username',
-              style: TextStyle(
-                  // fontSize: 18,
-                  // fontWeight: FontWeight.bold,
-                  ),
+            Text(
+              widget.username,
             ),
           ],
         ),
         Column(
-          children: const [
+          children: [
             Text(
-              '29',
+              widget.postCount.toString(),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

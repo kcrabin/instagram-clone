@@ -9,6 +9,8 @@ import '../../homepage/home_page.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
 final DateTime timestamp = DateTime.now();
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class Signup_Page extends StatefulWidget {
   final VoidCallback onClickedLogin;
@@ -20,6 +22,20 @@ class Signup_Page extends StatefulWidget {
 }
 
 class _Signup_PageState extends State<Signup_Page> {
+  // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  // SharedPreferences? prefs;
+
+  // storeValue() async {
+  //   prefs = await _prefs;
+  //   setState(() {
+  //     prefs!.setStringList('register_value', [
+  //       emailcontroller.text,
+  //       usernamecontroller.text,
+  //       fullnamecontroller.text
+  //     ]);
+  //   });
+  // }
+
   final _formfield = GlobalKey<FormState>();
   final emailcontroller = TextEditingController();
   final usernamecontroller = TextEditingController();
@@ -45,12 +61,16 @@ class _Signup_PageState extends State<Signup_Page> {
         password: passwordController.text.trim(),
       );
 
-      userRef.doc().set({
+      String uid = _auth.currentUser!.uid;
+
+      userRef.doc(uid).set({
         "username": username,
         "fullname": fullname,
         "email": email,
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "profilepic": ""
       });
+      // storeValue();
 
       Navigator.pushAndRemoveUntil(
         context,

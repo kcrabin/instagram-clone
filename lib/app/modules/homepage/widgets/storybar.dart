@@ -1,9 +1,39 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class StoryBar extends StatelessWidget {
+import '../../authentication/register/register.dart';
+
+final _auth = FirebaseAuth.instance;
+
+class StoryBar extends StatefulWidget {
   const StoryBar({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<StoryBar> createState() => _StoryBarState();
+}
+
+class _StoryBarState extends State<StoryBar> {
+  String ProfilePic = '';
+
+  @override
+  void initState() {
+    try {
+      String? uid = _auth.currentUser!.uid;
+
+      userRef.doc(uid).get().then((DocumentSnapshot doc) {
+        setState(() {
+          ProfilePic = doc['profilepic'];
+          // print(ProfilePic);
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +52,24 @@ class StoryBar extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                   child: Column(
                     children: [
-                      Stack(alignment: Alignment.bottomRight, children: const [
+                      Stack(alignment: Alignment.bottomRight, children: [
+                        // ClipRRect(
+                        //   child: Image.network(
+                        //     ProfilePic,
+                        //   ),
+                        // ),
                         CircleAvatar(
                           backgroundColor: Colors.grey,
                           radius: 36,
-                          backgroundImage: ExactAssetImage(
-                              'assets/newsfeed_photos/story2.png'),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(36),
+                            child: ProfilePic != ''
+                                ? Image.network(ProfilePic)
+                                : Image.network(
+                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
                         ),
                         Icon(
                           Icons.add_circle,
@@ -60,12 +102,6 @@ class StoryBar extends StatelessWidget {
                         radius: 33,
                         backgroundImage:
                             ExactAssetImage('assets/newsfeed_photos/view.jpeg'),
-                        // child: ClipOval(
-                        //   clipBehavior: Clip.hardEdge,
-
-                        //   child:
-                        //       Image.asset('assets/newsfeed_photos/story2.png'),
-                        // ),
                       ),
                     ),
                     const Text(
