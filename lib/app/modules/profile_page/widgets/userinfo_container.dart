@@ -15,7 +15,7 @@ class UserInfoContainer extends StatelessWidget {
           children: [
             CircleAvatar(
               // backgroundColor: Colors.blueGrey,
-              radius: 45,
+              radius: 38,
               backgroundImage:
                   ExactAssetImage('assets/newsfeed_photos/story2.png'),
               // child: ClipOval(
@@ -28,9 +28,9 @@ class UserInfoContainer extends StatelessWidget {
             const Text(
               'Username',
               style: TextStyle(
-                // fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+                  // fontSize: 18,
+                  // fontWeight: FontWeight.bold,
+                  ),
             ),
           ],
         ),
@@ -47,7 +47,7 @@ class UserInfoContainer extends StatelessWidget {
               'Posts',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -65,7 +65,7 @@ class UserInfoContainer extends StatelessWidget {
               'Followers',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -83,7 +83,7 @@ class UserInfoContainer extends StatelessWidget {
               'Followings',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ],

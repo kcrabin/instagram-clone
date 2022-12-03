@@ -1,11 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/widgets/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../main.dart';
 import '../../homepage/home_page.dart';
-import '../login/views/login.dart';
+
+final userRef = FirebaseFirestore.instance.collection('users');
+final DateTime timestamp = DateTime.now();
 
 class Signup_Page extends StatefulWidget {
-  const Signup_Page({Key? key}) : super(key: key);
+  final VoidCallback onClickedLogin;
+
+  const Signup_Page({Key? key, required this.onClickedLogin}) : super(key: key);
 
   @override
   State<Signup_Page> createState() => _Signup_PageState();
@@ -20,10 +28,42 @@ class _Signup_PageState extends State<Signup_Page> {
   bool passToggle = true;
 
   Future Signup() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: emailcontroller.text.trim(),
-      password: passwordController.text.trim(),
+    String email = emailcontroller.text;
+    String username = usernamecontroller.text;
+    String fullname = fullnamecontroller.text;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
     );
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailcontroller.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      userRef.doc().set({
+        "username": username,
+        "fullname": fullname,
+        "email": email,
+        "timestamp": timestamp
+      });
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Homepage(),
+        ),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      Utils.showSnackBar(e.message);
+    }
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   @override
@@ -189,18 +229,6 @@ class _Signup_PageState extends State<Signup_Page> {
                     if (_formfield.currentState!.validate()) {
                       print("success");
                       Signup();
-                      emailcontroller.clear();
-                      usernamecontroller.clear();
-                      fullnamecontroller.clear();
-                      passwordController.clear();
-
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Homepage(),
-                        ),
-                        (route) => false,
-                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -231,22 +259,35 @@ class _Signup_PageState extends State<Signup_Page> {
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
         color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('I have account?'),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Login_Page(),
-                    ),
-                  );
-                },
-                child: const Text('Login'))
-          ],
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: 'I have account?',
+              style: TextStyle(color: Colors.black),
+              children: [
+                TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = widget.onClickedLogin,
+                    text: 'Log in',
+                    style: const TextStyle(color: Colors.blue))
+              ]),
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     const Text('I have account?'),
+        //     TextButton(
+        //         onPressed: () {
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(
+        //               builder: (context) => Login_Page(),
+        //             ),
+        //           );
+        //         },
+        //         child: const Text('Login'))
+        //   ],
+        // ),
       ),
     );
   }
