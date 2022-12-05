@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/authentication/login/views/login.dart';
 import 'package:instagram_clone/app/modules/authentication/login/views/login_check_page.dart';
 import 'package:instagram_clone/app/modules/widgets/utils.dart';
+import 'package:uuid/uuid.dart';
 
 // void main() {
 //   runApp(const MyApp());
 // }
+var uuid = Uuid();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

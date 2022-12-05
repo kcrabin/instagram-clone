@@ -1,15 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/models/firebasehelper.dart';
+import 'package:instagram_clone/app/models/user.dart';
+import 'package:instagram_clone/app/modules/chat/chat_page.dart';
+import 'package:instagram_clone/app/modules/chat/recent_chats.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/suggestions.dart';
 
 import 'widgets/botton_navigationbar.dart';
 import 'widgets/newsfeed.dart';
 import 'widgets/storybar.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
   @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  UserModel? thisUserModel;
+  User? currentUser;
+
+  getUserModel() async {
+    thisUserModel = await FirebaseHelper.getUserModelById(currentUser!.uid);
+  }
+
+  @override
+  void initState() {
+    // getUserModel();
+    setState(() {
+      currentUser = FirebaseAuth.instance.currentUser;
+
+      // thisUserModel = await FirebaseHelper.getUserModelById(currentUser!.uid);
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    getUserModel();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -45,7 +75,21 @@ class Homepage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  // print('data $thisUserModel');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecentChats(
+                          firebaseUser: currentUser!,
+                          userModel: thisUserModel!),
+                    ),
+                    // ChatPage(
+                    //     firebaseUser: currentUser!,
+                    //     userModel: thisUserModel!),
+                    // ),
+                  );
+                },
                 child: Image.asset(
                   'assets/images/messanger.png',
                   height: 40,

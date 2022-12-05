@@ -68,7 +68,8 @@ class _Signup_PageState extends State<Signup_Page> {
         "fullname": fullname,
         "email": email,
         "timestamp": timestamp,
-        "profilepic": ""
+        "profilepic": "",
+        "uid": uid
       });
       // storeValue();
 

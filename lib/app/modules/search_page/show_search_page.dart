@@ -82,7 +82,7 @@ class _ShowSearchState extends State<ShowSearch> {
 
                 List<UserResult> searchResults = [];
                 snapshot.data?.docs.forEach((doc) {
-                  User user = User.fromDocument(doc);
+                  UserModel user = UserModel.fromDocument(doc);
                   UserResult searchResult = UserResult(
                     user: user,
                   );
@@ -116,7 +116,7 @@ class _ShowSearchState extends State<ShowSearch> {
 }
 
 class UserResult extends StatelessWidget {
-  final User? user;
+  final UserModel? user;
 
   const UserResult({super.key, this.user});
 
