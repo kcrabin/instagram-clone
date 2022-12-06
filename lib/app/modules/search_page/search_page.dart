@@ -1,10 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/chat/chat_page.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 import 'package:instagram_clone/app/modules/search_page/show_search_page.dart';
 
-class SearchPage extends StatelessWidget {
+import '../../models/firebasehelper.dart';
+import '../../models/user.dart';
+
+class SearchPage extends StatefulWidget {
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  UserModel? thisUserModel;
+  User? currentUser;
+
+  getUserModel() async {
+    thisUserModel = await FirebaseHelper.getUserModelById(currentUser!.uid);
+  }
+
+  @override
+  void initState() {
+    // getUserModel();
+    setState(() {
+      currentUser = FirebaseAuth.instance.currentUser;
+
+      // thisUserModel = await FirebaseHelper.getUserModelById(currentUser!.uid);
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    getUserModel();
+
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(title: Text('Search Page')),
@@ -19,7 +50,9 @@ class SearchPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ShowSearch()),
+                          builder: (context) => ChatPage(
+                              firebaseUser: currentUser!,
+                              userModel: thisUserModel!)),
                     );
                   },
                   child: Container(

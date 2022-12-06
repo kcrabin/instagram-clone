@@ -272,16 +272,6 @@ class _ProfileState extends State<Profile> {
                 height: 20,
               ),
 
-              // TabBar(
-              //   tabs: [
-              //     Icon(Icons.grid_on),
-              //     Icon(Icons.video_collection_outlined),
-              //     Icon(Icons.tag)
-
-              //   ],
-
-              // ),
-
               Column(
                 children: [
                   Row(
@@ -373,19 +363,6 @@ class _ProfileState extends State<Profile> {
                       }))
                 ],
               )
-
-              // FloatingActionButton(
-              //   onPressed: () {
-              //     FirebaseAuth.instance.signOut();
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => Login_Page(),
-              //       ),
-              //     );
-              //   },
-              //   child: Text('Logout'),
-              // )
             ],
           ),
         ),

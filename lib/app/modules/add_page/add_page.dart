@@ -30,6 +30,7 @@ class _AddPageState extends State<AddPage> {
   bool isUplaoding = false;
   final captionController = TextEditingController();
   String? username;
+  String? postOwnerProfile;
 
   @override
   void initState() {
@@ -40,6 +41,8 @@ class _AddPageState extends State<AddPage> {
       userRef.doc(uid).get().then((DocumentSnapshot doc) {
         // print(doc['username'] ?? '');
         username = doc['username'];
+        postOwnerProfile = doc['profilepic'];
+
         // print(uid);
         // print(doc.data());
         print(username);
@@ -74,12 +77,13 @@ class _AddPageState extends State<AddPage> {
 
     postRef.doc().set({
       "post_id": postId,
-      "likes": 0,
+      "likes": {},
       "comment": [],
       "email": _auth.currentUser!.email,
       "imagepath": imagePath,
       "username": username,
       "caption": caption,
+      "postOwnerProfile": postOwnerProfile,
       "time": timestamp,
     });
     setState(() {

@@ -54,9 +54,12 @@ class _HomepageState extends State<Homepage> {
                 width: 120,
               ),
             ),
-            Icon(
-              Icons.expand_more,
-              color: Colors.black,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.expand_more,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -70,7 +73,7 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
           const SizedBox(
-            width: 10,
+            width: 5,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -92,8 +95,8 @@ class _HomepageState extends State<Homepage> {
                 },
                 child: Image.asset(
                   'assets/images/messanger.png',
-                  height: 40,
-                  width: 31,
+                  height: 35,
+                  width: 30,
                 )),
           ),
         ],

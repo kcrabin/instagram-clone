@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/app/modules/authentication/widgets/input_field.dart';
+import 'package:instagram_clone/app/modules/authentication/register/register.dart';
+import 'package:instagram_clone/app/modules/homepage/widgets/comment_page.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/suggestions.dart';
 
 import 'caughtup_container.dart';
 
 final postRef = FirebaseFirestore.instance.collection('post');
+final _auth = FirebaseAuth.instance;
 
 class NewsFeed extends StatefulWidget {
   const NewsFeed({
@@ -19,6 +22,15 @@ class NewsFeed extends StatefulWidget {
 }
 
 class _NewsFeedState extends State<NewsFeed> {
+  TextEditingController commentController = TextEditingController();
+  String profilePic = '';
+  String username = '';
+
+  final String currentUserId = userRef.id;
+  late int likeCount;
+  Map likes = {};
+  bool? isLiked;
+
   Color favIconColor = Colors.grey;
   Color bookmarkColor = Colors.grey;
 
@@ -47,6 +59,20 @@ class _NewsFeedState extends State<NewsFeed> {
   @override
   void initState() {
     getPosts();
+    try {
+      String? uid = _auth.currentUser!.uid;
+
+      userRef.doc(uid).get().then((DocumentSnapshot doc) {
+        setState(() {
+          profilePic = doc['profilepic'];
+          username = doc['username'];
+
+          print(profilePic);
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
     super.initState();
   }
 
@@ -58,6 +84,40 @@ class _NewsFeedState extends State<NewsFeed> {
     });
   }
 
+  addComment(id) async {
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('post').doc(id);
+    if (commentController.text != '') {
+      setState(() {
+        docRef.update({
+          'comment': FieldValue.arrayUnion([
+            {
+              'comment': commentController.text,
+              'name': username == null ? 'Rabin' : username,
+              'created_at': DateTime.now(),
+              'commentorProfile': profilePic,
+            }
+          ])
+        });
+        commentController.clear();
+      });
+    }
+  }
+
+  handleLikePost() {
+    bool _isLiked = likes[currentUserId] == true;
+
+    if (_isLiked) {
+// postRef.doc()
+
+      setState(() {
+        likeCount -= 1;
+        isLiked = false;
+        likes[currentUserId] == false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -66,276 +126,331 @@ class _NewsFeedState extends State<NewsFeed> {
             stream: FirebaseFirestore.instance.collection('post').snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) return new Text('Loading');
-
-              final docs = snapshot.data!.docs;
-              return ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: docs.length,
-                  // scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    final data = docs[index];
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  final docs = snapshot.data!.docs;
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: docs.length,
+                      // scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        final data = docs[index];
+                        String postId = data.id;
+                        String postOwner = data.get('username');
+                        String ownerEmail = data.get('email');
+                        String caption = data.get('caption');
+                        String postOwnerProfile = data.get('postOwnerProfile');
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.grey,
-                                      radius: 20,
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                            'assets/newsfeed_photos/storyphoto.PNG'),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
                                       children: [
-                                        // Text(
-                                        //   'John winson',
-                                        //   style: TextStyle(
-                                        //       fontWeight: FontWeight.bold),
-                                        // ),
-                                        Text(
-                                          data.get('username'),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                        CircleAvatar(
+                                          backgroundColor: Colors.grey,
+                                          radius: 20,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(36),
+                                            child: (postOwnerProfile != '')
+                                                ? Image.network(
+                                                    postOwnerProfile)
+                                                : Image.network(
+                                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                                                    fit: BoxFit.cover,
+                                                  ),
                                           ),
                                         ),
-                                        Text(
-                                          'Pokhara, Nepal',
-                                          style: TextStyle(fontSize: 11),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Text(
+                                            //   'John winson',
+                                            //   style: TextStyle(
+                                            //       fontWeight: FontWeight.bold),
+                                            // ),
+                                            Text(
+                                              data.get('username'),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Pokhara, Nepal',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          print(data);
+                                        },
+                                        child: Icon(
+                                          Icons.more_vert,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              // const SizedBox(
+                              //   height: 5,
+                              // ),
+                              GestureDetector(
+                                onDoubleTap: handleLikePost(),
+                                child: Container(
+                                  height: 300,
+                                  width: double.infinity,
+                                  decoration:
+                                      const BoxDecoration(color: Colors.grey),
+                                  child: Image.network(
+                                    data.get(
+                                      'imagepath',
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  // Text(data!['username']),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      print(data);
-                                    },
-                                    child: Icon(
-                                      Icons.more_vert,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          // const SizedBox(
-                          //   height: 5,
-                          // ),
-                          Container(
-                            height: 250,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(color: Colors.grey),
-                            child: Image.network(
-                              data.get(
-                                'imagepath',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                            // Text(data!['username']),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 5),
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            handleLikePost();
+                                            // setState(() {
+                                            //   if (favIconColor == Colors.grey) {
+                                            //     favIconColor = Colors.red;
+                                            //   } else {
+                                            //     favIconColor = Colors.grey;
+                                            //   }
+                                            // });
+                                          },
+                                          child: Icon(
+                                            Icons.favorite,
+                                            size: 27,
+                                            color: favIconColor,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        InkWell(
+                                            onTap: () {},
+                                            child: Image.asset(
+                                              'assets/images/comment.png',
+                                              height: 28,
+                                            )),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        InkWell(
+                                            onTap: () {
+                                              showShareDialog(context);
+                                            },
+                                            child: Image.asset(
+                                              'assets/images/share.png',
+                                              height: 20,
+                                            )),
+                                      ],
+                                    ),
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (favIconColor == Colors.grey) {
-                                            favIconColor = Colors.red;
+                                          if (bookmarkColor == Colors.grey) {
+                                            bookmarkColor = Colors.orange;
                                           } else {
-                                            favIconColor = Colors.grey;
+                                            bookmarkColor = Colors.grey;
                                           }
                                         });
                                       },
                                       child: Icon(
-                                        Icons.favorite,
+                                        Icons.bookmark_border_sharp,
                                         size: 27,
-                                        color: favIconColor,
+                                        color: bookmarkColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // const SizedBox(
+                              //   height: 3,
+                              // ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                child: Row(
+                                  children: const [
+                                    Text('Liked by '),
+                                    Text(
+                                      'John ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('and '),
+                                    Text('others',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              // const SizedBox(
+                              //   height: 5,
+                              // ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      data.get('username'),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(data.get('caption')),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CommentPage(
+                                                      postCaption: caption,
+                                                      email: ownerEmail,
+                                                      username: postOwner,
+                                                      postid: postId,
+                                                    )));
+                                      },
+                                      child: const Text(
+                                        'View all comments',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // const SizedBox(
+                              //   height: 3,
+                              // ),
+
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 15,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(36),
+                                        child: (profilePic != '')
+                                            ? Image.network(profilePic)
+                                            : Image.network(
+                                                'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 10,
-                                    ),
-                                    InkWell(
-                                        onTap: () {},
-                                        child: Image.asset(
-                                          'assets/images/comment.png',
-                                          height: 28,
-                                        )),
-                                    const SizedBox(
                                       width: 15,
                                     ),
-                                    InkWell(
-                                        onTap: () {
-                                          showShareDialog(context);
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/share.png',
-                                          height: 20,
-                                        )),
+                                    SizedBox(
+                                      height: 30,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.84,
+                                      child: TextFormField(
+                                        controller: commentController,
+                                        decoration: InputDecoration(
+                                          suffixIcon: IconButton(
+                                              onPressed: () {
+                                                addComment(postId);
+                                              },
+                                              icon: Text(
+                                                'Post',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              )),
+                                          hintText: 'Add a comment',
+                                          border: InputBorder.none,
+                                          // UnderlineInputBorder(
+                                          //   borderSide: BorderSide(color: Colors.grey),
+                                          // ),
+                                          // contentPadding: EdgeInsets.all(10),
+                                        ),
+
+                                        // onFieldSubmitted: handleSearch,
+                                      ),
+                                    ),
                                   ],
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (bookmarkColor == Colors.grey) {
-                                        bookmarkColor = Colors.orange;
-                                      } else {
-                                        bookmarkColor = Colors.grey;
-                                      }
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.bookmark_border_sharp,
-                                    size: 27,
-                                    color: bookmarkColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // const SizedBox(
-                          //   height: 3,
-                          // ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                            child: Row(
-                              children: const [
-                                Text('Liked by '),
-                                Text(
-                                  'John ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text('and '),
-                                Text('others',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          ),
-                          // const SizedBox(
-                          //   height: 5,
-                          // ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                            child: Row(
-                              children: [
-                                Text(
-                                  data.get('username'),
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(data.get('caption')),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                            child: Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {},
-                                  child: const Text(
-                                    'View all comments',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // const SizedBox(
-                          //   height: 3,
-                          // ),
-
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                            child: Row(
-                              children: [
-                                const CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: ExactAssetImage(
-                                      'assets/newsfeed_photos/story2.png'),
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    InputField(
-                                        hint: 'Add a comment',
-                                        inputAction: TextInputAction.done,
-                                        inputType: TextInputType.text);
-                                  },
-                                  child: const Text(
-                                    'Add a comment...',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 18,
-                                      // fontWeight: FontWeight.bold,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      data.get('time').toString(),
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 10),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                            child: Row(
-                              children: [
-                                Text(
-                                  data.get('time').toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 10),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-
-                          // Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: TextButton(
-                          //       onPressed: () {},
-                          //       child: Text(
-                          //         'View all 5 comments',
-                          //         style: TextStyle(color: Colors.grey),
-                          //       )),
-                          // ),
-                        ],
-                      ),
-                    );
-                  });
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(snapshot.error.toString()),
+                  );
+                } else {
+                  return Center(
+                    child: Text('No posts'),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             }),
         Container(
           color: Colors.grey[200],
@@ -377,317 +492,4 @@ class _NewsFeedState extends State<NewsFeed> {
       ],
     );
   }
-
-  //   Column(
-  //     children: [
-  //       ListView.builder(
-  //         physics: NeverScrollableScrollPhysics(),
-  //         shrinkWrap: true,
-  //         itemCount: 1,
-  //         // scrollDirection: Axis.vertical,
-  //         itemBuilder: (context, index) => Padding(
-  //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-  //           child: Column(
-  //             children: [
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Padding(
-  //                     padding: const EdgeInsets.all(8.0),
-  //                     child: Row(
-  //                       children: [
-  //                         CircleAvatar(
-  //                           backgroundColor: Colors.grey,
-  //                           radius: 20,
-  //                           child: ClipOval(
-  //                             child: Image.asset(
-  //                                 'assets/newsfeed_photos/storyphoto.PNG'),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(
-  //                           width: 8,
-  //                         ),
-  //                         Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: const [
-  //                             Text(
-  //                               'John winson',
-  //                               style: TextStyle(fontWeight: FontWeight.bold),
-  //                             ),
-  //                             Text(
-  //                               'Pokhara, Nepal',
-  //                               style: TextStyle(fontSize: 11),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   Row(
-  //                     children: const [
-  //                       Icon(
-  //                         Icons.more_vert,
-  //                         color: Colors.grey,
-  //                       ),
-  //                     ],
-  //                   )
-  //                 ],
-  //               ),
-  //               // const SizedBox(
-  //               //   height: 5,
-  //               // ),
-  //               Container(
-  //                 height: 250,
-  //                 decoration: const BoxDecoration(color: Colors.grey),
-  //                 child: CarouselSlider(
-  //                   items: [
-  //                     SizedBox(
-  //                       // height: 350,
-  //                       child:
-  //                           Image.asset('assets/newsfeed_photos/gradient.jpeg'),
-  //                     ),
-  //                     SizedBox(
-  //                       height: 350,
-  //                       child:
-  //                           Image.asset('assets/newsfeed_photos/image1.jpeg'),
-  //                     ),
-  //                     SizedBox(
-  //                       height: 350,
-  //                       child:
-  //                           Image.asset('assets/newsfeed_photos/image2.jpeg'),
-  //                     ),
-  //                     SizedBox(
-  //                       height: 350,
-  //                       child:
-  //                           Image.asset('assets/newsfeed_photos/mountain.jpeg'),
-  //                     ),
-  //                   ],
-  //                   options: CarouselOptions(
-  //                       height: 400,
-  //                       enlargeCenterPage: true,
-  //                       aspectRatio: 16 / 9,
-  //                       viewportFraction: 1),
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 5),
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     Row(
-  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                       children: [
-  //                         InkWell(
-  //                           onTap: () {
-  //                             setState(() {
-  //                               if (favIconColor == Colors.grey) {
-  //                                 favIconColor = Colors.red;
-  //                               } else {
-  //                                 favIconColor = Colors.grey;
-  //                               }
-  //                             });
-  //                           },
-  //                           child: Icon(
-  //                             Icons.favorite,
-  //                             size: 27,
-  //                             color: favIconColor,
-  //                           ),
-  //                         ),
-  //                         const SizedBox(
-  //                           width: 10,
-  //                         ),
-  //                         InkWell(
-  //                             onTap: () {},
-  //                             child: Image.asset(
-  //                               'assets/images/comment.png',
-  //                               height: 28,
-  //                             )),
-  //                         const SizedBox(
-  //                           width: 15,
-  //                         ),
-  //                         InkWell(
-  //                             onTap: () {
-  //                               showShareDialog(context);
-  //                             },
-  //                             child: Image.asset(
-  //                               'assets/images/share.png',
-  //                               height: 20,
-  //                             )),
-  //                       ],
-  //                     ),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         setState(() {
-  //                           if (bookmarkColor == Colors.grey) {
-  //                             bookmarkColor = Colors.orange;
-  //                           } else {
-  //                             bookmarkColor = Colors.grey;
-  //                           }
-  //                         });
-  //                       },
-  //                       child: Icon(
-  //                         Icons.bookmark_border_sharp,
-  //                         size: 27,
-  //                         color: bookmarkColor,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               // const SizedBox(
-  //               //   height: 3,
-  //               // ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-  //                 child: Row(
-  //                   children: const [
-  //                     Text('Liked by '),
-  //                     Text(
-  //                       'John ',
-  //                       style: TextStyle(fontWeight: FontWeight.bold),
-  //                     ),
-  //                     Text('and '),
-  //                     Text('others',
-  //                         style: TextStyle(fontWeight: FontWeight.bold)),
-  //                   ],
-  //                 ),
-  //               ),
-  //               // const SizedBox(
-  //               //   height: 5,
-  //               // ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-  //                 child: Row(
-  //                   children: [
-  //                     Text(
-  //                       'Username',
-  //                       style: TextStyle(fontWeight: FontWeight.bold),
-  //                     ),
-  //                     SizedBox(
-  //                       width: 5,
-  //                     ),
-  //                     Text('caption ...........'),
-  //                   ],
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: 5,
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-  //                 child: Row(
-  //                   children: [
-  //                     InkWell(
-  //                       onTap: () {},
-  //                       child: const Text(
-  //                         'View all 5 comments',
-  //                         style: TextStyle(color: Colors.grey),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               // const SizedBox(
-  //               //   height: 3,
-  //               // ),
-
-  //               const SizedBox(
-  //                 height: 5,
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-  //                 child: Row(
-  //                   children: [
-  //                     const CircleAvatar(
-  //                       radius: 15,
-  //                       backgroundImage: ExactAssetImage(
-  //                           'assets/newsfeed_photos/story2.png'),
-  //                     ),
-  //                     const SizedBox(
-  //                       width: 15,
-  //                     ),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         InputField(
-  //                             hint: 'Add a comment',
-  //                             inputAction: TextInputAction.done,
-  //                             inputType: TextInputType.text);
-  //                       },
-  //                       child: const Text(
-  //                         'Add a comment...',
-  //                         style: TextStyle(
-  //                           color: Colors.grey,
-  //                           fontSize: 18,
-  //                           // fontWeight: FontWeight.bold,
-  //                         ),
-  //                       ),
-  //                     )
-  //                   ],
-  //                 ),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
-  //                 child: Row(
-  //                   children: const [
-  //                     Text(
-  //                       '28 October',
-  //                       style: TextStyle(color: Colors.grey, fontSize: 10),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-
-  //               // Align(
-  //               //   alignment: Alignment.centerLeft,
-  //               //   child: TextButton(
-  //               //       onPressed: () {},
-  //               //       child: Text(
-  //               //         'View all 5 comments',
-  //               //         style: TextStyle(color: Colors.grey),
-  //               //       )),
-  //               // ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Container(
-  //         color: Colors.grey[200],
-  //         child: Padding(
-  //           padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-  //           child: Column(
-  //             children: [
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Text('Suggested for you'),
-  //                   TextButton(onPressed: () {}, child: Text('See all'))
-  //                 ],
-  //               ),
-  //               Suggestions(),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         height: 20,
-  //       ),
-  //       CircleAvatar(
-  //         backgroundColor: Colors.red,
-  //         radius: 27,
-  //         child: CircleAvatar(
-  //           backgroundColor: Colors.white,
-  //           radius: 25,
-  //           child: Icon(
-  //             Icons.check,
-  //             color: Colors.red,
-  //           ),
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         height: 15,
-  //       ),
-  //       CaughtUpContainer(),
-  //     ],
-  //   );
-  // }
 }

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/app/modules/profile_page/profile_page.dart';
 
 final updateRef = FirebaseFirestore.instance.collection('users');
 
@@ -107,7 +108,8 @@ class _EditProfileState extends State<EditProfile> {
                 print(widget.userIdToUpdate);
                 Update();
 
-                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profile()));
               },
               icon: Icon(
                 Icons.done,
@@ -122,13 +124,16 @@ class _EditProfileState extends State<EditProfile> {
           child: Column(
             children: [
               ClipRRect(
-                child: imageUrl != null
+                child: (imageUrl != '')
                     ? Image.network(
                         imageUrl!,
                         fit: BoxFit.cover,
                       )
-                    : Image.network(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg'),
+                    : Text(
+                        'Choose a Profile Picture',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
               ),
               TextButton(
                 onPressed: () {

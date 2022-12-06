@@ -16,7 +16,8 @@ class StoryBar extends StatefulWidget {
 }
 
 class _StoryBarState extends State<StoryBar> {
-  String ProfilePic = '';
+  String profilePic = '';
+  String profilePicToDisplay = '';
 
   @override
   void initState() {
@@ -24,16 +25,26 @@ class _StoryBarState extends State<StoryBar> {
       String? uid = _auth.currentUser!.uid;
 
       userRef.doc(uid).get().then((DocumentSnapshot doc) {
-        setState(() {
-          ProfilePic = doc['profilepic'];
-          // print(ProfilePic);
-        });
+        if (doc['profilepic'] != '') {
+          setState(() {
+            profilePicToDisplay = doc['profilepic'];
+          });
+        } else {
+          print('no profilepic');
+        }
       });
     } catch (e) {
       print(e);
     }
     super.initState();
   }
+
+  // displayProfileOnStorybar() {
+  //   setState(() {
+  //     profilePicToDisplay = profilePic;
+  //     // print(ProfilePic);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +74,8 @@ class _StoryBarState extends State<StoryBar> {
                           radius: 36,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(36),
-                            child: ProfilePic != ''
-                                ? Image.network(ProfilePic)
+                            child: (profilePicToDisplay != '')
+                                ? Image.network(profilePicToDisplay)
                                 : Image.network(
                                     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
                                     fit: BoxFit.cover,

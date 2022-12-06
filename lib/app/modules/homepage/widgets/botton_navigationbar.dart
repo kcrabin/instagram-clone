@@ -23,7 +23,8 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   final _firebaseStorage = FirebaseStorage.instance;
 
-  String ProfilePic = '';
+  String profilePic = '';
+  String profilePicToDisplay = '';
 
   File? image;
   final imagePicker = ImagePicker();
@@ -50,10 +51,18 @@ class _BottomBarState extends State<BottomBar> {
       String? uid = _auth.currentUser!.uid;
 
       userRef.doc(uid).get().then((DocumentSnapshot doc) {
-        setState(() {
-          ProfilePic = doc['profilepic'];
-          // print(ProfilePic);
-        });
+        if (doc['profilepic'] != '') {
+          setState(() {
+            profilePicToDisplay = doc['profilepic'];
+          });
+        } else {
+          print('no profilepic print from navigationbar');
+        }
+
+        // setState(() {
+        //   ProfilePic = doc['profilepic'];
+        //   // print(ProfilePic);
+        // });
       });
     } catch (e) {
       print(e);
@@ -191,8 +200,8 @@ class _BottomBarState extends State<BottomBar> {
                 radius: 15,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(36),
-                  child: ProfilePic != ''
-                      ? Image.network(ProfilePic)
+                  child: (profilePicToDisplay != '')
+                      ? Image.network(profilePicToDisplay)
                       : Image.network(
                           'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
                           fit: BoxFit.cover,

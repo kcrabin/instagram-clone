@@ -133,17 +133,17 @@ class _RecentChatsState extends State<RecentChats> {
                                 Row(
                                   children: [
                                     CircleAvatar(
-                                      backgroundColor: Colors.grey,
-                                      radius: 35,
+                                      backgroundColor: Colors.black,
+                                      radius: 34,
                                       child: CircleAvatar(
-                                        radius: 34,
                                         backgroundColor: Colors.white,
-                                        child: IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
+                                        radius: 33,
+                                        child: ClipOval(
+                                            clipBehavior: Clip.hardEdge,
+                                            child: Icon(
                                               Icons.add,
+                                              size: 35,
                                               color: Colors.black,
-                                              size: 37,
                                             )),
                                       ),
                                     ),
@@ -288,8 +288,16 @@ class _RecentChatsState extends State<RecentChats> {
                                       ),
                                     ),
                                     title: Text(targetUser.username.toString()),
-                                    subtitle: Text(
-                                        chatRoomodel.lastMessage.toString()),
+                                    subtitle: (chatRoomodel.lastMessage
+                                                .toString() !=
+                                            '')
+                                        ? Text(
+                                            chatRoomodel.lastMessage.toString())
+                                        : Text(
+                                            'Say hi to your new friend',
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
                                   );
                                 } else {
                                   return Container();
