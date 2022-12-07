@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../add_page/add_page.dart';
+import '../../add_page/add_post_page.dart';
 import '../../authentication/register/register.dart';
 import '../../profile_page/profile_page.dart';
 import '../../search_page/search_page.dart';

@@ -102,15 +102,13 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Column(
-            children: [
-              StoryBar(),
-              NewsFeed(),
-              // Suggestions(),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StoryBar(),
+            NewsFeed(),
+            // Suggestions(),
+          ],
         ),
       ),
       bottomNavigationBar: BottomBar(),

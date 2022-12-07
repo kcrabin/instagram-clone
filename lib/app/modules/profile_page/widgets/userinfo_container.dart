@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class UserInfoContainer extends StatefulWidget {
   String username;
   int postCount;
+  int postCountToDisplay = 0;
   String profilepic;
   UserInfoContainer(
       {Key? key,
