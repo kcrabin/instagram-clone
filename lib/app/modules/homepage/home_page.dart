@@ -4,6 +4,7 @@ import 'package:instagram_clone/app/models/firebasehelper.dart';
 import 'package:instagram_clone/app/models/user.dart';
 import 'package:instagram_clone/app/modules/chat/chat_page.dart';
 import 'package:instagram_clone/app/modules/chat/recent_chats.dart';
+import 'package:instagram_clone/app/modules/homepage/widgets/bookmarked_list.dart';
 import 'package:instagram_clone/app/modules/homepage/widgets/suggestions.dart';
 
 import 'widgets/botton_navigationbar.dart';
@@ -64,16 +65,23 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
         actions: [
-          const Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.favorite_outline,
-              color: Colors.black,
-              size: 35,
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookmarkedList(),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.bookmark,
+                color: Colors.orange,
+                size: 35,
+              ),
             ),
-          ),
-          const SizedBox(
-            width: 5,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -111,7 +119,7 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(),
+      // bottomNavigationBar: BottomBar(),
     );
   }
 }

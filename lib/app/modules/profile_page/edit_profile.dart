@@ -108,8 +108,7 @@ class _EditProfileState extends State<EditProfile> {
                 print(widget.userIdToUpdate);
                 Update();
 
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Profile()));
+                Navigator.pop(context);
               },
               icon: Icon(
                 Icons.done,

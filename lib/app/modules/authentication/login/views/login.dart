@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/forgot_password_page/forgot_password.dart';
+import 'package:instagram_clone/app/modules/main_navigation_page.dart';
 import 'package:instagram_clone/main.dart';
 
-import '../../../homepage/home_page.dart';
 import '../../../widgets/utils.dart';
 
 class Login_Page extends StatefulWidget {
@@ -40,7 +40,7 @@ class _Login_PageState extends State<Login_Page> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Homepage(),
+          builder: (context) => NavigationPage(),
         ),
       );
     } on FirebaseAuthException catch (e) {

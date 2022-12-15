@@ -192,7 +192,7 @@ class ShopPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(),
+      // bottomNavigationBar: BottomBar(),
     );
   }
 }

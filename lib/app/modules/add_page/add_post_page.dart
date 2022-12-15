@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/app/modules/authentication/register/register.dart';
+import 'package:instagram_clone/app/modules/profile_page/profile_page.dart';
 import 'package:uuid/uuid.dart';
 
 // final StorageRefrence storageRef = FirebaseFirestore.instance.ref();
@@ -77,8 +78,9 @@ class _AddPageState extends State<AddPage> {
 
     postRef.doc().set({
       "post_id": postId,
-      "likes": {},
+      "likedBy": [],
       "comment": [],
+      "bookmarkedBy": [],
       "email": _auth.currentUser!.email,
       "imagepath": imagePath,
       "username": username,
@@ -103,7 +105,9 @@ class _AddPageState extends State<AddPage> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profile()));
               },
               child: Icon(
                 Icons.arrow_back_outlined,

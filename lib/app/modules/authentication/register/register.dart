@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/app/modules/main_navigation_page.dart';
 import 'package:instagram_clone/app/modules/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../main.dart';
-import '../../homepage/home_page.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
 final DateTime timestamp = DateTime.now();
@@ -76,7 +76,7 @@ class _Signup_PageState extends State<Signup_Page> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => Homepage(),
+          builder: (context) => NavigationPage(),
         ),
         (route) => false,
       );

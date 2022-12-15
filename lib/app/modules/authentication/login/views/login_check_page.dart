@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:instagram_clone/app/modules/authentication/auth_page.dart';
 import 'package:instagram_clone/app/modules/authentication/login/views/login.dart';
 import 'package:instagram_clone/app/modules/homepage/home_page.dart';
+import 'package:instagram_clone/app/modules/main_navigation_page.dart';
 
 class LoginCheck extends StatelessWidget {
   const LoginCheck({super.key});
@@ -24,7 +25,7 @@ class LoginCheck extends StatelessWidget {
                 child: Text('Sonething went wrong'),
               );
             } else if (snapshot.hasData) {
-              return Homepage();
+              return NavigationPage();
             } else {
               return AuthPage();
             }

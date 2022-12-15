@@ -156,9 +156,13 @@ class _StoryBarState extends State<StoryBar> {
                                 ),
                         ),
                       ),
-                      Icon(
-                        Icons.add_circle,
-                        color: Colors.blue,
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 12,
+                        child: Icon(
+                          Icons.add_circle,
+                          color: Colors.blue,
+                        ),
                       )
                     ]),
                   ),

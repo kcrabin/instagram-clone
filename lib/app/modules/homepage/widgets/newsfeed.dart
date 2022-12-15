@@ -22,17 +22,17 @@ class NewsFeed extends StatefulWidget {
 }
 
 class _NewsFeedState extends State<NewsFeed> {
+  // bool? isLiked;
+
   TextEditingController commentController = TextEditingController();
   String profilePic = '';
   String username = '';
+  String currentUserEmail = '';
 
   final String currentUserId = userRef.id;
   late int likeCount;
-  Map likes = {};
-  bool? isLiked;
 
   Color favIconColor = Colors.grey;
-  Color bookmarkColor = Colors.grey;
 
   showShareDialog(BuildContext context) {
     Widget okButton = TextButton(
@@ -59,6 +59,7 @@ class _NewsFeedState extends State<NewsFeed> {
   @override
   void initState() {
     getPosts();
+
     try {
       String? uid = _auth.currentUser!.uid;
 
@@ -66,6 +67,7 @@ class _NewsFeedState extends State<NewsFeed> {
         setState(() {
           profilePic = doc['profilepic'];
           username = doc['username'];
+          currentUserEmail = doc['email'];
 
           print(profilePic);
         });
@@ -104,18 +106,28 @@ class _NewsFeedState extends State<NewsFeed> {
     }
   }
 
-  handleLikePost() {
-    bool _isLiked = likes[currentUserId] == true;
+  Future getLike(id) async {
+    var value = await FirebaseFirestore.instance
+        .collection('post')
+        .doc(id)
+        .get()
+        .then((value) {
+      return value.data()!['likedBy'];
+    });
+    print('like value $value');
+    return value.contains(FirebaseAuth.instance.currentUser!.email);
+  }
 
-    if (_isLiked) {
-// postRef.doc()
-
-      setState(() {
-        likeCount -= 1;
-        isLiked = false;
-        likes[currentUserId] == false;
-      });
-    }
+  Future getBookmarked(id) async {
+    var value = await FirebaseFirestore.instance
+        .collection('post')
+        .doc(id)
+        .get()
+        .then((value) {
+      return value.data()!['bookmarkedBy'];
+    });
+    print('bookmark value $value');
+    return value.contains(FirebaseAuth.instance.currentUser!.email);
   }
 
   @override
@@ -141,6 +153,10 @@ class _NewsFeedState extends State<NewsFeed> {
                         String ownerEmail = data.get('email');
                         String caption = data.get('caption');
                         String postOwnerProfile = data.get('postOwnerProfile');
+                        List likers = data.get('likedBy');
+                        int likes = likers.length;
+                        List bookmarkers = data.get('bookmarkedBy');
+                        // if(bookmarkedBy.contains(''))
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                           child: Column(
@@ -200,6 +216,8 @@ class _NewsFeedState extends State<NewsFeed> {
                                       InkWell(
                                         onTap: () {
                                           print(data);
+                                          print(
+                                              'this is form 3 dots ${likers}');
                                         },
                                         child: Icon(
                                           Icons.more_vert,
@@ -214,7 +232,7 @@ class _NewsFeedState extends State<NewsFeed> {
                               //   height: 5,
                               // ),
                               GestureDetector(
-                                onDoubleTap: handleLikePost(),
+                                // onDoubleTap: handleLikePost(),
                                 child: Container(
                                   height: 300,
                                   width: double.infinity,
@@ -230,7 +248,7 @@ class _NewsFeedState extends State<NewsFeed> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 5),
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -239,32 +257,47 @@ class _NewsFeedState extends State<NewsFeed> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        InkWell(
-                                          onTap: () {
-                                            handleLikePost();
-                                            // setState(() {
-                                            //   if (favIconColor == Colors.grey) {
-                                            //     favIconColor = Colors.red;
-                                            //   } else {
-                                            //     favIconColor = Colors.grey;
-                                            //   }
-                                            // });
-                                          },
-                                          child: Icon(
-                                            Icons.favorite,
-                                            size: 27,
-                                            color: favIconColor,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        InkWell(
-                                            onTap: () {},
-                                            child: Image.asset(
-                                              'assets/images/comment.png',
-                                              height: 28,
-                                            )),
+                                        IconButton(
+                                            onPressed: () {
+                                              like() async {
+                                                // print(getLike(postId));
+                                                DocumentReference docRef =
+                                                    FirebaseFirestore.instance
+                                                        .collection('post')
+                                                        .doc(postId);
+                                                bool isLiked =
+                                                    await getLike(postId);
+
+                                                if (isLiked) {
+                                                  docRef.update({
+                                                    'likedBy':
+                                                        FieldValue.arrayRemove([
+                                                      FirebaseAuth.instance
+                                                          .currentUser!.email
+                                                    ])
+                                                  });
+                                                } else {
+                                                  docRef.update({
+                                                    'likedBy':
+                                                        FieldValue.arrayUnion([
+                                                      FirebaseAuth.instance
+                                                          .currentUser!.email
+                                                    ])
+                                                  });
+                                                }
+                                              }
+
+                                              like();
+                                            },
+                                            icon: (likers
+                                                    .contains(currentUserEmail))
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                    size: 27,
+                                                  )
+                                                : Icon(Icons
+                                                    .favorite_border_outlined)),
                                         const SizedBox(
                                           width: 15,
                                         ),
@@ -278,22 +311,47 @@ class _NewsFeedState extends State<NewsFeed> {
                                             )),
                                       ],
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          if (bookmarkColor == Colors.grey) {
-                                            bookmarkColor = Colors.orange;
-                                          } else {
-                                            bookmarkColor = Colors.grey;
+                                    IconButton(
+                                        onPressed: () {
+                                          bookmark() async {
+                                            // print(getLike(postId));
+                                            DocumentReference docRef =
+                                                FirebaseFirestore.instance
+                                                    .collection('post')
+                                                    .doc(postId);
+                                            bool isLiked =
+                                                await getBookmarked(postId);
+
+                                            if (isLiked) {
+                                              docRef.update({
+                                                'bookmarkedBy':
+                                                    FieldValue.arrayRemove([
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.email
+                                                ])
+                                              });
+                                            } else {
+                                              docRef.update({
+                                                'bookmarkedBy':
+                                                    FieldValue.arrayUnion([
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.email
+                                                ])
+                                              });
+                                            }
                                           }
-                                        });
-                                      },
-                                      child: Icon(
-                                        Icons.bookmark_border_sharp,
-                                        size: 27,
-                                        color: bookmarkColor,
-                                      ),
-                                    ),
+
+                                          bookmark();
+                                        },
+                                        icon: (bookmarkers
+                                                .contains(currentUserEmail))
+                                            ? Icon(
+                                                Icons.bookmark_added,
+                                                color: Colors.orange,
+                                                size: 27,
+                                              )
+                                            : Icon(
+                                                Icons.bookmark_add_outlined)),
                                   ],
                                 ),
                               ),
@@ -301,19 +359,22 @@ class _NewsFeedState extends State<NewsFeed> {
                               //   height: 3,
                               // ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 5),
+                                padding: const EdgeInsets.fromLTRB(10, 0, 8, 5),
                                 child: Row(
-                                  children: const [
-                                    Text('Liked by '),
+                                  children: [
                                     Text(
-                                      'John ',
+                                      likes.toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text('and '),
-                                    Text('others',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text('likes'),
+                                    // Text('and '),
+                                    // Text('others',
+                                    //     style: TextStyle(
+                                    //         fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                               ),
