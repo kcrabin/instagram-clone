@@ -298,17 +298,17 @@ class _NewsFeedState extends State<NewsFeed> {
                                                   )
                                                 : Icon(Icons
                                                     .favorite_border_outlined)),
-                                        const SizedBox(
-                                          width: 15,
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              showShareDialog(context);
-                                            },
-                                            child: Image.asset(
-                                              'assets/images/share.png',
-                                              height: 20,
-                                            )),
+                                        // const SizedBox(
+                                        //   width: 15,
+                                        // ),
+                                        // InkWell(
+                                        //     onTap: () {
+                                        //       showShareDialog(context);
+                                        //     },
+                                        //     child: Image.asset(
+                                        //       'assets/images/share.png',
+                                        //       height: 20,
+                                        //     )),
                                       ],
                                     ),
                                     IconButton(

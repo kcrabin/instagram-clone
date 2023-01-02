@@ -229,18 +229,21 @@ class _Login_PageState extends State<Login_Page> {
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
         color: Colors.transparent,
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-              text: 'Don\'t have account? ',
-              style: TextStyle(color: Colors.black),
-              children: [
-                TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = widget.onClickedSignup,
-                    text: 'Sign Up',
-                    style: const TextStyle(color: Colors.blue))
-              ]),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: 'Don\'t have account? ',
+                style: TextStyle(color: Colors.black),
+                children: [
+                  TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = widget.onClickedSignup,
+                      text: 'Sign Up',
+                      style: const TextStyle(color: Colors.blue))
+                ]),
+          ),
         ),
 
         // Row(

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/app/modules/homepage/widgets/botton_navigationbar.dart';
 import 'package:instagram_clone/app/modules/profile_page/edit_profile.dart';
 
 import '../authentication/register/register.dart';
@@ -59,7 +58,7 @@ class _ProfileState extends State<Profile> {
   getPosts() {
     postRef.get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        print(doc.data);
+        print('print from getpost ---$doc.data');
       });
     });
   }
@@ -99,9 +98,11 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
               child: const Icon(
-                Icons.add_box_outlined,
+                Icons.logout,
                 color: Colors.black,
                 size: 27,
               ),

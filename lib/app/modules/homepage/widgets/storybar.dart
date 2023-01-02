@@ -45,16 +45,13 @@ class _StoryBarState extends State<StoryBar> {
     });
   }
 
-  @override
-  void initState() {
+  void getStoryFromFirebase() {
     try {
       String? uid = _auth.currentUser!.uid;
 
       userRef.doc(uid).get().then((DocumentSnapshot doc) {
         if (doc['profilepic'] != '') {
-          setState(() {
-            profilePicToDisplay = doc['profilepic'];
-          });
+          profilePicToDisplay = doc['profilepic'];
         } else {
           print('no profilepic');
         }
@@ -62,8 +59,12 @@ class _StoryBarState extends State<StoryBar> {
     } catch (e) {
       print(e);
     }
-    super.initState();
   }
+  // @override
+  // void initState() {
+
+  //   super.initState();
+  // }
 
   // displayProfileOnStorybar() {
   //   setState(() {
@@ -74,6 +75,7 @@ class _StoryBarState extends State<StoryBar> {
 
   @override
   Widget build(BuildContext context) {
+    getStoryFromFirebase();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(

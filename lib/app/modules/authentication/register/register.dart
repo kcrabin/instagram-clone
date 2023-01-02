@@ -280,18 +280,21 @@ class _Signup_PageState extends State<Signup_Page> {
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
         color: Colors.transparent,
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-              text: 'I have account?',
-              style: TextStyle(color: Colors.black),
-              children: [
-                TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = widget.onClickedLogin,
-                    text: 'Log in',
-                    style: const TextStyle(color: Colors.blue))
-              ]),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: 'I have account?',
+                style: TextStyle(color: Colors.black),
+                children: [
+                  TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = widget.onClickedLogin,
+                      text: 'Log in',
+                      style: const TextStyle(color: Colors.blue))
+                ]),
+          ),
         ),
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.center,
