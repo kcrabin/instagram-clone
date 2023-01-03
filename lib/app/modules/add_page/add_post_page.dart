@@ -30,6 +30,7 @@ class _AddPageState extends State<AddPage> {
 
   bool isUplaoding = false;
   final captionController = TextEditingController();
+  final locationController = TextEditingController();
   String? username;
   String? postOwnerProfile;
 
@@ -70,6 +71,7 @@ class _AddPageState extends State<AddPage> {
 
   handleSubmit() {
     String caption = captionController.text;
+    String location = locationController.text;
     String imagePath = widget.imageUrl;
 
     setState(() {
@@ -85,6 +87,7 @@ class _AddPageState extends State<AddPage> {
       "imagepath": imagePath,
       "username": username,
       "caption": caption,
+      "location": location,
       "postOwnerProfile": postOwnerProfile,
       "time": timestamp,
     });
@@ -174,46 +177,21 @@ class _AddPageState extends State<AddPage> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+
+              SizedBox(
                 height: 50,
                 width: double.infinity,
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Tag people'),
-                ),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1, color: Colors.grey),
-                    top: BorderSide(width: 1, color: Colors.grey),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      label: Text('Add location'),
+                    ),
+                    controller: locationController,
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                height: 50,
-                width: double.infinity,
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Add location')),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(width: 1, color: Colors.grey),
-                  // top: BorderSide(width: 1, color: Colors.grey),
-                )),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                height: 50,
-                width: double.infinity,
-                child: Align(
-                    alignment: Alignment.centerLeft, child: Text('Add music')),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(width: 1, color: Colors.grey),
-                  // top: BorderSide(width: 1, color: Colors.grey),
-                )),
-              ),
+
               // Card(
               //   shape: RoundedRectangleBorder(
               //     side: BorderSide(

@@ -21,19 +21,8 @@ class _StoryViewState extends State<StoryView> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Stack(
+          child: Column(
             children: [
-              Container(
-                child: (widget.storyImage != '')
-                    ? Image.network(
-                        widget.storyImage.toString(),
-                        fit: BoxFit.fill,
-                      )
-                    : Image.network(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
-                        fit: BoxFit.cover,
-                      ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -67,6 +56,17 @@ class _StoryViewState extends State<StoryView> {
                       },
                       icon: Icon(Icons.close))
                 ],
+              ),
+              Container(
+                child: (widget.storyImage != '')
+                    ? Image.network(
+                        widget.storyImage.toString(),
+                        fit: BoxFit.fill,
+                      )
+                    : Image.network(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                        fit: BoxFit.cover,
+                      ),
               ),
             ],
           ),

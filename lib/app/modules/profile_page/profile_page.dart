@@ -56,11 +56,9 @@ class _ProfileState extends State<Profile> {
   }
 
   getPosts() {
-    postRef.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        print('print from getpost ---$doc.data');
-      });
-    });
+    final postSnapshots = postRef.where('email', isEqualTo: email).get();
+
+    // print('this is form get posts---$docs');
   }
 
   // const Profile({super.key});
@@ -190,7 +188,7 @@ class _ProfileState extends State<Profile> {
             children: [
               UserInfoContainer(
                 username: username,
-                postCount: postCount,
+                email: email,
                 profilepic: profilePic,
               ),
               const SizedBox(

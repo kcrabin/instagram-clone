@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class UserInfoContainer extends StatefulWidget {
   String username;
-  int postCount;
+  String email;
   int postCountToDisplay = 0;
   String profilepic;
   UserInfoContainer(
       {Key? key,
       required this.username,
-      required this.postCount,
+      required this.email,
       required this.profilepic})
       : super(key: key);
 
@@ -17,13 +18,14 @@ class UserInfoContainer extends StatefulWidget {
 }
 
 class _UserInfoContainerState extends State<UserInfoContainer> {
+  int postCount = 0;
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
               backgroundColor: Colors.grey,
@@ -41,60 +43,73 @@ class _UserInfoContainerState extends State<UserInfoContainer> {
             ),
           ],
         ),
-        Column(
-          children: [
-            Text(
-              widget.postCount.toString(),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Posts',
-              style: TextStyle(
-                fontSize: 12,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        SizedBox(
+          width: 10,
         ),
-        Column(
-          children: const [
-            Text(
-              '139',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Followers',
-              style: TextStyle(
-                fontSize: 12,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: const [
-            Text(
-              '132',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Followings',
-              style: TextStyle(
-                fontSize: 12,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+        StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('post')
+                .where('email', isEqualTo: widget.email)
+                .snapshots(),
+            builder: (context, snapshots) {
+              final docs = snapshots.data?.docs;
+              if (docs != null) postCount = docs.length;
+              return Column(
+                children: [
+                  Text(
+                    postCount.toString(),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Posts',
+                    style: TextStyle(
+                      fontSize: 12,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              );
+            }),
+
+        // Column(
+        //   children: const [
+        //     Text(
+        //       '139',
+        //       style: TextStyle(
+        //         fontSize: 18,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //     Text(
+        //       'Followers',
+        //       style: TextStyle(
+        //         fontSize: 12,
+        //         // fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        // Column(
+        //   children: const [
+        //     Text(
+        //       '132',
+        //       style: TextStyle(
+        //         fontSize: 18,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //     Text(
+        //       'Followings',
+        //       style: TextStyle(
+        //         fontSize: 12,
+        //         // fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //   ],
+        // ),
         const SizedBox(
           width: 2,
         )

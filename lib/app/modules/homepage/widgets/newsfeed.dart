@@ -156,6 +156,7 @@ class _NewsFeedState extends State<NewsFeed> {
                         List likers = data.get('likedBy');
                         int likes = likers.length;
                         List bookmarkers = data.get('bookmarkedBy');
+                        String location = data.get('location');
                         // if(bookmarkedBy.contains(''))
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
@@ -203,7 +204,7 @@ class _NewsFeedState extends State<NewsFeed> {
                                               ),
                                             ),
                                             Text(
-                                              'Pokhara, Nepal',
+                                              location,
                                               style: TextStyle(fontSize: 11),
                                             ),
                                           ],
