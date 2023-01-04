@@ -154,8 +154,8 @@ class _ChatPageState extends State<ChatPage> {
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('users')
-                  .where('email', isEqualTo: searchController.text)
-                  .where('email', isNotEqualTo: email)
+                  .where('username', isEqualTo: searchController.text)
+                  .where('username', isNotEqualTo: username)
                   .snapshots(),
               builder: ((context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {

@@ -30,26 +30,17 @@ class _HighlightsViewState extends State<HighlightsView> {
                     color: Colors.black,
                   ))
             ]),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: (widget.highlightsImage != '')
-                      ? Image.network(
-                          widget.highlightsImage.toString(),
-                          fit: BoxFit.fill,
-                        )
-                      : Image.network(
-                          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
-                          fit: BoxFit.contain,
-                        ),
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: (widget.highlightsImage != '')
+              ? Image.network(
+                  widget.highlightsImage.toString(),
+                  fit: BoxFit.cover,
+                )
+              : Image.network(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/1280px-A_black_image.jpg',
+                  fit: BoxFit.cover,
                 ),
-              ],
-            ),
-          ],
         ),
       ),
     );

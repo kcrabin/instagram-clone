@@ -190,11 +190,11 @@ class _Signup_PageState extends State<Signup_Page> {
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(8),
                   ),
-                  // validator: (value) {
-                  //   if (value!.isEmpty) {
-                  //     return "Please Enter Full name";
-                  //   }
-                  // },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Full name";
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -207,11 +207,11 @@ class _Signup_PageState extends State<Signup_Page> {
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(8),
                   ),
-                  // validator: (value) {
-                  //   if (value!.isEmpty) {
-                  //     return "Please Enter Username";
-                  //   }
-                  // },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Username";
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 10,

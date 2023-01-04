@@ -123,7 +123,7 @@ class _ProfileState extends State<Profile> {
                           children: [
                             ListTile(
                               onTap: () {
-                                FirebaseAuth.instance.signOut();
+                                // FirebaseAuth.instance.signOut();
                                 setState(() {
                                   print("setting pressed");
                                 });
