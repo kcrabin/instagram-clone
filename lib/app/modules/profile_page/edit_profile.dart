@@ -73,7 +73,7 @@ class _EditProfileState extends State<EditProfile> {
         .update({
           'fullname': fullname,
           'username': username,
-          'timestamp': DateTime.now(),
+          'timestamp': Timestamp.fromDate(DateTime.now()),
           'profilepic': imageUrl,
         })
         .then((_) => print('updated'))
